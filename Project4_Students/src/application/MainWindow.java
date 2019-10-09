@@ -34,6 +34,10 @@ public class MainWindow {
 	@FXML private Button btnCheckoutRecords;
 	@FXML private Button btnMembers;
 	@FXML private Button btnUsers;
+	@FXML private Button btnNew;
+	@FXML private Button btnEdit;
+	@FXML private Button btnDelete;
+	
 	
 	@FXML private TableView<BookData> tvBook;
 	@FXML private TableView<?> tvBookCopy;
@@ -49,14 +53,12 @@ public class MainWindow {
 			{
 				t.setDisable(false);
 				tabPane.getSelectionModel().select(t);
-				if(btn.getId().equals("btnBooks"))
-					listBooks();
 			}
 		}
 	}
 	
-	public void listBooks() {
-		
+	public void listBooks(ActionEvent event) {
+		System.out.println("LIST BOOK");
 		tvBook = new TableView<>();
 		
         TableColumn colBTitle = new TableColumn<>("Title");
@@ -77,6 +79,8 @@ public class MainWindow {
 		List<BookData> bdList = new ArrayList<BookData>();
 		
 		bookMap.forEach((s,b) -> bdList.add(new BookData(b)));
+		
+		bdList.forEach((e) -> System.out.println(e.getTitle()));
 		
 		tvBook.setEditable(false);
 		tvBook.getColumns().clear();
