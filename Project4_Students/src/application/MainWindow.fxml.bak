@@ -18,11 +18,10 @@
                   <Separator prefHeight="6.0" prefWidth="353.0" />
                   <Button id="btnBooks" fx:id="btnBooks" mnemonicParsing="false" onAction="#toggleTabs" prefHeight="60.0" prefWidth="351.0" text="Books" />
                   <Separator prefHeight="6.0" prefWidth="353.0" />
-                  <Button id="btnUsers" fx:id="btnUsers" mnemonicParsing="false" onAction="#toggleTabs" prefHeight="60.0" prefWidth="351.0" text="Authors" />
+                  <Button id="btnUsers" fx:id="btnUsers" mnemonicParsing="false" onAction="#toggleTabs" prefHeight="60.0" prefWidth="351.0" text="Users" />
                </children>
             </FlowPane>
-         </children>
-    </AnchorPane>
+         </children></AnchorPane>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <SplitPane dividerPositions="0.9305724725943971" layoutX="36.0" layoutY="199.0" orientation="VERTICAL" prefHeight="823.0" prefWidth="232.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -42,7 +41,6 @@
                                                       <TextField fx:id="txtSearchCheckOutRecords" layoutX="97.0" layoutY="9.0" prefHeight="31.0" prefWidth="261.0" />
                                                       <Label layoutX="14.0" layoutY="14.0" text="Member ID" />
                                                       <Button fx:id="btnSearchCheckOut" layoutX="367.0" layoutY="9.0" mnemonicParsing="false" onAction="#findMemberInCheckoutRecords" text="Search" />
-                                                      <Button fx:id="btnPrintRecords" layoutX="442.0" layoutY="9.0" mnemonicParsing="false" onAction="#printRecords" prefHeight="31.0" prefWidth="67.0" text="Print" />
                                                    </children>
                                                 </AnchorPane>
                                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
@@ -84,74 +82,31 @@
                                                 <TableColumn fx:id="clmZip" prefWidth="75.0" text="Zip" />
                                             </columns>
                                           </TableView>
-                                       </children>
-                                </AnchorPane>
+                                       </children></AnchorPane>
                               </content>
                             </Tab>
-                            <Tab id="tabBooks" fx:id="tabBooks" closable="false" disable="true" text="Books">
+                              <Tab id="tabBooks" fx:id="tabBooks" closable="false" disable="true" text="Books">
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <SplitPane dividerPositions="0.8162692847124825" layoutX="65.0" layoutY="17.0" prefHeight="521.0" prefWidth="715.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <items>
-                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="519.0" prefWidth="439.0">
-                                                   <children>
-                                                      <TableView fx:id="tvBook" layoutX="-66.0" layoutY="31.0" onMouseClicked="#getCopies" prefHeight="519.0" prefWidth="509.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
-                                                        <columns>
-                                                          <TableColumn fx:id="colBTitle" editable="false" prefWidth="174.0" text="Title" />
-                                                          <TableColumn fx:id="colBAuth" editable="false" prefWidth="147.0" text="Authors" />
-                                                            <TableColumn fx:id="colBIsdn" editable="false" prefWidth="100.0" text="ISBN" />
-                                                            <TableColumn fx:id="colBAvNm" editable="false" prefWidth="79.0" text="Number" />
-                                                            <TableColumn fx:id="colBMaxD" editable="false" prefWidth="79.0" text="Max Day" />
-                                                        </columns>
-                                                      </TableView>
-                                                   </children>
-                                                </AnchorPane>
-                                              <AnchorPane>
-                                                   <children>
-                                                      <SplitPane dividerPositions="0.9245647969052224" layoutX="217.0" layoutY="44.0" orientation="VERTICAL" prefHeight="519.0" prefWidth="419.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                        <items>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="417.0" prefWidth="134.0">
-                                                               <children>
-                                                                  <TableView fx:id="tvBookCopy" layoutX="-17.0" layoutY="-62.0" prefHeight="474.0" prefWidth="134.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                                    <columns>
-                                                                      <TableColumn fx:id="colBCId" minWidth="8.0" prefWidth="61.0" text="Copy ID" />
-                                                                      <TableColumn fx:id="colBCIA" prefWidth="63.0" text="Available" />
-                                                                    </columns>
-                                                                  </TableView>
-                                                               </children>
-                                                            </AnchorPane>
-                                                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="184.0" prefWidth="158.0">
-                                                               <children>
-                                                                  <Button fx:id="btnAddCopy" layoutX="5.0" layoutY="15.0" mnemonicParsing="false" onAction="#addCopy" prefHeight="35.0" prefWidth="125.0" text="Add Copy" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                                               </children>
-                                                            </AnchorPane>
-                                                        </items>
-                                                      </SplitPane>
-                                                   </children>
-                                                </AnchorPane>
-                                            </items>
-                                          </SplitPane>
-                                       </children></AnchorPane>
-                                </content>
-                              </Tab>
-                            <Tab id="tabUsers" fx:id="tabUsers" closable="false" disable="true" text="Authors">
-                                <content>
-                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tblAuthor" layoutX="193.0" layoutY="93.0" prefHeight="721.0" prefWidth="827.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                          <TableView fx:id="tvBook" layoutX="14.0" layoutY="14.0" prefHeight="702.0" prefWidth="470.0">
                                             <columns>
-                                              <TableColumn fx:id="clmAuthFName" prefWidth="103.0" text="First name" />
-                                              <TableColumn fx:id="clmAuthLName" prefWidth="97.0" text="Last name" />
-                                                <TableColumn fx:id="clmAuthTel" prefWidth="84.0" text="Telephone" />
-                                                <TableColumn fx:id="clmAuthBio" prefWidth="115.0" text="Bio" />
-                                                <TableColumn fx:id="clmAuthStreet" prefWidth="74.0" text="Street" />
-                                                <TableColumn fx:id="clmAuthCity" prefWidth="89.0" text="City" />
-                                                <TableColumn fx:id="clmAuthState" prefWidth="132.0" text="State" />
-                                                <TableColumn fx:id="clmAuthZip" prefWidth="110.0" text="Zip" />
+                                              <TableColumn prefWidth="75.0" text="C1" />
+                                              <TableColumn prefWidth="75.0" text="C2" />
+                                            </columns>
+                                          </TableView>
+                                          <TableView fx:id="tvBookCopy" layoutX="494.0" layoutY="14.0" prefHeight="703.0" prefWidth="319.0">
+                                            <columns>
+                                              <TableColumn prefWidth="75.0" text="C1" />
+                                              <TableColumn prefWidth="75.0" text="C2" />
                                             </columns>
                                           </TableView>
                                        </children></AnchorPane>
+                                </content>
+                              </Tab>
+                              <Tab id="tabUsers" fx:id="tabUsers" closable="false" disable="true" text="Users">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                 </content>
                               </Tab>
                           </tabs>

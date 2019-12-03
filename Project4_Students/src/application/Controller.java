@@ -38,6 +38,7 @@ public class Controller {
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			Stage stg = new Stage();
 			stg.setMaximized(true);
+			stg.setTitle("Library System 1.0");
 			stg.setScene(scene);
 			stg.show();
 		} catch(LoginException ex) {

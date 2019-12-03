@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
-import business.Author;
 import business.Book;
 import business.CheckOutEntry;
 import business.LibraryMember;
@@ -18,7 +17,7 @@ import business.LibraryMember;
 public class DataAccessFacade implements DataAccess {
 	
 	enum StorageType {
-		BOOKS, MEMBERS, USERS, RECORDS, AUTHORS;
+		BOOKS, MEMBERS, USERS, RECORDS;
 	}
 	
 	public static final String OUTPUT_DIR = System.getProperty("user.dir") 
@@ -31,26 +30,6 @@ public class DataAccessFacade implements DataAccess {
 		String memberId = member.getMemberId();
 		mems.put(memberId, member);
 		saveToStorage(StorageType.MEMBERS, mems);	
-	}
-	public void saveNewBook(Book book) {
-		HashMap<String, Book> books = readBooksMap();
-		String isbn = book.getIsbn();
-		books.put(isbn, book);
-		saveToStorage(StorageType.BOOKS, books);	
-	}
-	// Adding a copy to the book
-	public void updateBook(Book book) {
-		HashMap<String, Book> books = readBooksMap();
-		String isbn = book.getIsbn();
-		books.replace(isbn, book);
-		saveToStorage(StorageType.BOOKS, books);	
-	}
-	
-	public void saveNewAuthor(Author author) {
-		HashMap<String, Author> authors = readAuthorMap();
-		String aKey = author.getKey();
-		authors.put(aKey, author);
-		saveToStorage(StorageType.AUTHORS, authors);	
 	}
 	
 	public void saveNewCheckoutRecord(CheckOutEntry entry) {
@@ -80,13 +59,7 @@ public class DataAccessFacade implements DataAccess {
 		return (HashMap<String, LibraryMember>) readFromStorage(
 				StorageType.MEMBERS);
 	}
-	@SuppressWarnings("unchecked")
-	public HashMap<String, Author> readAuthorMap() {
-		//Returns a Map with name/value pairs being
-		//   memberId -> LibraryMember
-		return (HashMap<String, Author>) readFromStorage(
-				StorageType.AUTHORS);
-	}
+	
 	@SuppressWarnings("unchecked")
 	public HashMap<String, CheckOutEntry> readCheckoutRecordMap() {
 		//Returns a Map with name/value pairs being
@@ -123,12 +96,6 @@ public class DataAccessFacade implements DataAccess {
 		HashMap<String, LibraryMember> members = new HashMap<String, LibraryMember>();
 		memberList.forEach(member -> members.put(member.getMemberId(), member));
 		saveToStorage(StorageType.MEMBERS, members);
-	}
-	
-	static void loadAuthorMap(List<Author> authorList) {
-		HashMap<String, Author> authors = new HashMap<String, Author>();
-		authorList.forEach(author -> authors.put(author.getFirstName()+author.getLastName(), author));
-		saveToStorage(StorageType.AUTHORS, authors);
 	}
 	
 	static void saveToStorage(StorageType type, Object ob) {

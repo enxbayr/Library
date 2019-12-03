@@ -17,7 +17,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -28,8 +27,6 @@ import java.util.List;
 
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
-import business.Author;
-import business.AuthorRecord;
 import business.BaseController;
 import business.Book;
 import business.BookCopy;
@@ -68,7 +65,7 @@ public class MainWindow {
 	@FXML
 	private TableView<BookData> tvBook;
 	@FXML
-	private TableView<BookData> tvBookCopy;
+	private TableView<?> tvBookCopy;
 
 	@FXML
 	private TableView<BookRecords> tblCheckOutRecords;
@@ -97,25 +94,6 @@ public class MainWindow {
 	// member table
 
 	@FXML
-	private Button btnAddCopy;
-	@FXML
-	private TableColumn<BookData, String> colBTitle;
-	@FXML
-	private TableColumn<BookData, String> colBAuth;
-	@FXML
-	private TableColumn<BookData, String> colBIsdn;
-	@FXML
-	private TableColumn<BookData, String> colBAvNm;
-	@FXML
-	private TableColumn<BookData, String> colBMaxD;
-
-	@FXML
-	private TableColumn<BookData, String> colBCId;
-	@FXML
-	private TableColumn<BookData, String> colBCIA;
-
-	private ObservableList<BookData> data;
-	@FXML
 	private TableView<MemberRecords> tblMembers;
 	@FXML
 	private TableColumn<MemberRecords, String> clmMemberID;
@@ -133,28 +111,7 @@ public class MainWindow {
 	private TableColumn<MemberRecords, String> clmState;
 	@FXML
 	private TableColumn<MemberRecords, String> clmZip;
-	
-	/***********************************************************************************************/
-	// Author
-	@FXML
-	private TableView<AuthorRecord> tblAuthor;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthFName;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthLName;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthTel;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthBio;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthStreet;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthCity;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthState;
-	@FXML
-	private TableColumn<AuthorRecord, String> clmAuthZip;
-	
+
 	@FXML
 	private Button btnNew;
 	@FXML
@@ -169,20 +126,8 @@ public class MainWindow {
 	private TextField txtSearchCheckOutRecords;
 	@FXML
 	private Button btnSearchCheckOut;
-	@FXML 
-	private Button btnPrintRecords;
-	
-	@FXML
-	private TextField txtAuthBio;
-	@FXML
-	private TextField txtAuthFName;
-	@FXML
-	private TextField txtAuthLName;
-	@FXML
-	private TextField txtAuthPhone;
 
 	ObservableList<BookRecords> recordData = FXCollections.observableArrayList();
-	ObservableList<BookRecords> searchData = FXCollections.observableArrayList();
 
 	public void initialize() {
 		clmISBN.setCellValueFactory(new PropertyValueFactory<BookRecords, String>("isbn"));
@@ -204,38 +149,16 @@ public class MainWindow {
 		clmCity.setCellValueFactory(new PropertyValueFactory<MemberRecords, String>("city"));
 		clmState.setCellValueFactory(new PropertyValueFactory<MemberRecords, String>("state"));
 		clmZip.setCellValueFactory(new PropertyValueFactory<MemberRecords, String>("zip"));
-		
-		clmAuthBio.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("bio"));
-		clmAuthFName.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("fname"));
-		clmAuthLName.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("lname"));
-		clmAuthTel.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("tel"));
-		clmAuthStreet.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("street"));
-		clmAuthCity.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("city"));
-		clmAuthState.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("state"));
-		clmAuthZip.setCellValueFactory(new PropertyValueFactory<AuthorRecord, String>("zip"));
-		
-		
 
 		tabs[0] = tabCheckoutRecords;
 		tabs[1] = tabMembers;
 		tabs[2] = tabBooks;
 		tabs[3] = tabUsers;
-		colBTitle.setCellValueFactory(new PropertyValueFactory<BookData, String>("title"));
-		colBAuth.setCellValueFactory(new PropertyValueFactory<BookData, String>("authors"));
-		colBIsdn.setCellValueFactory(new PropertyValueFactory<BookData, String>("isbn"));
-		colBAvNm.setCellValueFactory(new PropertyValueFactory<BookData, String>("number"));
-		colBMaxD.setCellValueFactory(new PropertyValueFactory<BookData, String>("maxDay"));
 
-		colBCId.setCellValueFactory(new PropertyValueFactory<BookData, String>("copyNum"));
-		colBCIA.setCellValueFactory(new PropertyValueFactory<BookData, String>("isAvailable"));
-		reloadBook();
 		TableViewLoad();
 		toggleAuth();
 	}
-	
-	public void reloadBook() {
-		tvBook.setItems(listBooks());
-	}
+
 	private void toggleAuth() {
 		switch (SystemController.currentAuth) {
 		case LIBRARIAN:
@@ -273,100 +196,17 @@ public class MainWindow {
 			if (t.getId().endsWith(btn.getId().substring(3))) {
 				t.setDisable(false);
 				tabPane.getSelectionModel().select(t);
-				if (btn.getId().equals("btnBooks"))
-					reloadBook();
 			}
 		}
 	}
 
-	public ObservableList<BookData> listBooks() {
-		daf = new DataAccessFacade();
-		data = FXCollections.observableArrayList();
-		bookMap = new HashMap<String, Book>();
-		bookMap = daf.readBooksMap();
-		List<BookData> bdList = new ArrayList<BookData>();
-		bookMap.forEach((s, b) -> bdList.add(new BookData(b)));
-		bdList.forEach((e) -> data.add(e));
-		return data;
-	}
-	public void addBook(ActionEvent event) throws Exception {
-		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/application/AddBook.fxml"));
-			Scene scene = new Scene(root, 400, 450);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			Stage stg = new Stage();
-			stg.setTitle("Add Book");
-			stg.setMaximized(false);
-			stg.setScene(scene);
-			stg.show();
-		} catch (Exception ex) {
-
-		}
-	}
-
-	public void editBook(ActionEvent event) throws Exception {
-		try {
-
-			BookData bd = tvBook.getSelectionModel().getSelectedItem();
-			String selectedBookIsbn = bd.getIsbn();
-
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/application/AddBook.fxml"));
-			Parent root = loader.load();
-			Scene scene = new Scene(root, 400, 450);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			Stage stg = new Stage();
-			stg.setTitle("Edit Book");
-			stg.setResizable(false);
-			stg.setScene(scene);
-
-			AddBook controller = loader.<AddBook>getController();
-			controller.initData(selectedBookIsbn);
-			stg.show();
-
-		} catch (Exception ex) {
-
-		}
-	}
-
-	public void getCopies(MouseEvent evt) throws Exception {
-
-		ObservableList<BookData> copyList = FXCollections.observableArrayList();
-		BookData tmpBd;
-		BookData bd = tvBook.getSelectionModel().getSelectedItem();
-
-		Book book = daf.readBooksMap().get(bd.getIsbn());
-
-		BookCopy[] copies = book.getCopies();
-
-		for (BookCopy bc : copies) {
-			tmpBd = new BookData();
-			tmpBd.setCopyNum(String.valueOf(bc.getCopyNum()));
-			tmpBd.setIsAvailable(String.valueOf(bc.isAvailable()));
-			copyList.add(tmpBd);
-		}
-		tvBookCopy.setItems(copyList);
-
-	}
-
-	public void addCopy(ActionEvent evt) {
-		daf = new DataAccessFacade();
-		BookData bd = tvBook.getSelectionModel().getSelectedItem();
-		Book book = daf.readBooksMap().get(bd.getIsbn());
-		book.addCopy();
-		daf.updateBook(book);
-	}
-	
 	public void TableViewLoad() {
 		tblCheckOutRecords.getItems().clear();
 		tblCheckOutRecords.setItems(getTicketData());
 
 		tblMembers.getItems().clear();
 		tblMembers.setItems(getMemberData());
-		
-		tblAuthor.getItems().clear();
-		tblAuthor.setItems(getAuthorData());
 	}
-	
 
 	public ObservableList<BookRecords> getTicketData() {
 		BookRecords br = new BookRecords();
@@ -408,26 +248,6 @@ public class MainWindow {
 		}
 		return memberData;
 	}
-	
-	public ObservableList<AuthorRecord> getAuthorData() {
-		ObservableList<AuthorRecord> authorData = FXCollections.observableArrayList();
-		AuthorRecord mr = new AuthorRecord();
-		DataAccess da = new DataAccessFacade();
-		HashMap<String, Author> records = da.readAuthorMap();
-		for (Author co : records.values()) {
-			mr.setBio(String.valueOf(co.getBio()));
-			mr.setFname(co.getFirstName());
-			mr.setLname(co.getLastName());
-			mr.setTel(co.getTelephone());
-			mr.setStreet(co.getAddress().getState());
-			mr.setCity(co.getAddress().getCity());
-			mr.setState(co.getAddress().getState());
-			mr.setZip(co.getAddress().getZip());
-			authorData.add(mr);
-			mr = new AuthorRecord();
-		}
-		return authorData;
-	}
 
 	public void openEditWindow(ActionEvent evt) {
 		for (Tab t : tabs) {
@@ -465,15 +285,16 @@ public class MainWindow {
 			height = 500;
 			break;
 		case "tabBooks":
-			source = "/application/AddBook.fxml";
-			height = 450;
+			source = "/application/MainWindow.fxml";
+			height = 400;
 			width = 400;
 			break;
 		default:
-			source = "/ui/Authors.fxml";
+			source = "/application/MainWindow.fxml";
+			height = 400;
 			width = 400;
-			height = 500;
 			break;
+
 		}
 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(source));
@@ -498,11 +319,9 @@ public class MainWindow {
 				MemberRecords mr = tblMembers.getSelectionModel().getSelectedItem();
 				recordId = mr.getMemberId();
 			} else if (windowName.equalsIgnoreCase("tabBooks")) {
-				BookData bd = tvBook.getSelectionModel().getSelectedItem();
-				recordId =  bd.getIsbn();
+
 			} else {
-				AuthorRecord bd = tblAuthor.getSelectionModel().getSelectedItem();
-				recordId =  bd.getFname() + bd.getLname();
+
 			}
 		}
 		root = loader.load();
@@ -520,10 +339,6 @@ public class MainWindow {
 			controller = loader.<MemberController>getController();
 			break;
 		case "tabBooks":
-			controller = loader.<AddBook>getController();
-			break;
-		case "tabUsers":
-			controller = loader.<AuthorController>getController();
 			break;
 		}
 		controller.initData(recordId);
@@ -531,13 +346,13 @@ public class MainWindow {
 	}
 
 	public void findMemberInCheckoutRecords(ActionEvent evt) {
+		ObservableList<BookRecords> searchData = FXCollections.observableArrayList();
 		String memberID = txtSearchCheckOutRecords.getText();
 		if(memberID == null || memberID.equals(""))
 		{
 			TableViewLoad();
 			return;
 		}
-		searchData.clear();
 		BookRecords br = new BookRecords();
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, CheckOutEntry> records = da.readCheckoutRecordMap();
@@ -559,20 +374,5 @@ public class MainWindow {
 		}
 		tblCheckOutRecords.getItems().clear();
 		tblCheckOutRecords.setItems(searchData);
-	}
-	
-	public void printRecords(ActionEvent av)
-	{
-		for(BookRecords br: searchData)
-			System.out.println(br);
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Info");
-		alert.setHeaderText("Successfully printe");
-		alert.setContentText("Printing checkout record has been done. Please check your console.");
-		alert.showAndWait().ifPresent(rs -> {
-			if (rs == ButtonType.OK) {
-				System.out.println("Pressed Ok.");
-			}
-		});
 	}
 }
